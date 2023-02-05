@@ -8,6 +8,19 @@
 
   <ItemGroup>
     <PackageReference Include="Accord.Statistics" Version="3.8.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.19.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="MonGothRepository">
+      <HintPath>bin\Debug\net6.0\MonGothRepository.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\Model.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>
