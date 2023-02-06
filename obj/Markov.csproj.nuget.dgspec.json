@@ -1,20 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Work\\Markov\\Markov.csproj": {}
+    "C:\\GitHub\\School\\Markov\\Markov.csproj": {}
   },
   "projects": {
-    "C:\\Work\\Markov\\Markov.csproj": {
+    "C:\\GitHub\\School\\Markov\\Markov.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Work\\Markov\\Markov.csproj",
+        "projectUniqueName": "C:\\GitHub\\School\\Markov\\Markov.csproj",
         "projectName": "Markov",
-        "projectPath": "C:\\Work\\Markov\\Markov.csproj",
+        "projectPath": "C:\\GitHub\\School\\Markov\\Markov.csproj",
         "packagesPath": "C:\\Users\\Gothmog\\.nuget\\packages\\",
-        "outputPath": "C:\\Work\\Markov\\obj\\",
+        "outputPath": "C:\\GitHub\\School\\Markov\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
           "C:\\Users\\Gothmog\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -25,7 +26,9 @@
           "net6.0"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {}
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "https://nuget.telerik.com/nuget": {},
+          "https://www.nuget.org/api/v2/": {}
         },
         "frameworks": {
           "net6.0": {
@@ -58,16 +61,11 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[6.0.12, 6.0.12]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -76,7 +74,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.307\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.405\\RuntimeIdentifierGraph.json"
         }
       }
     }
