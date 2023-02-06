@@ -1,4 +1,5 @@
-﻿using Markov.Classes.HMModel;
+﻿using Markov.Classes;
+using Markov.Classes.HMModel;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Markov.Controllers
@@ -7,12 +8,18 @@ namespace Markov.Controllers
 	{
 		public IActionResult Index()
 		{
-			HMModel model = new HMModel();
+			HMModel model = new HMModel() { MaxIterations = 3 };
 			model.GenerateModel();
-			
+			var probalityModel = new ProbabilityModel() 
+			{ 
+				Probabilities = new List<ProbabilitySequence>(), 
+				Sequence = "AGATCCATTGACCGTTACACATCAGATTGATAGATTGATTTTGATCGACAAAGTG",
+				HMModel = model
+			};
+			probalityModel.GenerateProbabiliies();
+			probalityModel.CountProbalities();
+			var res = probalityModel.Probabilities.Where(x => x.Probability > x.BackgroudProbalitiy).ToList();
 			return View();
 		}
-
-		private 
 	}
 }

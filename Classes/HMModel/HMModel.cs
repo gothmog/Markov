@@ -21,17 +21,25 @@ namespace Markov.Classes.HMModel
 			double result = 1;
 			for(int i = 0; i < sequence.Length; i++)
 			{
-				var actualNode = Nodes[i];
+				var actualNode = Nodes.Where(x=> !(x is IterationNode)).ToList()[i];
 				if(actualNode.Lines.Count == 2)
 				{
-					result = result * CountIteration(sequence.Substring(i, iterationSteps), isBackGround, defaultBackgroud) * actualNode.Lines.FirstOrDefault(x=> x.ToIteration).Weight;
-					i = i + iterationSteps;
+					if (iterationSteps > 0)
+					{
+						result = result * (isBackGround ? defaultBackgroud : actualNode.Values[sequence[i]]);
+						result = result * CountIteration(sequence.Substring(i, iterationSteps), isBackGround, defaultBackgroud) * actualNode.Lines.FirstOrDefault(x => x.ToIteration).Weight;
+						sequence = sequence.Remove(i + 1, iterationSteps);
+					}
+					else
+					{
+						result = result * (isBackGround ? defaultBackgroud : actualNode.Values[sequence[i]]) * actualNode.Lines.FirstOrDefault(x => !x.ToIteration).Weight;
+					}
 				}
 				if(actualNode.Lines.Count == 1)
 				{
 					result = result * (isBackGround ? defaultBackgroud : actualNode.Values[sequence[i]]) * actualNode.Lines[0].Weight;
 				}
-				if(actualNode.Lines == null)
+				if(actualNode.Lines.Count == 0)
 				{
 					result = result * (isBackGround ? defaultBackgroud : actualNode.Values[sequence[i]]);
 				}
