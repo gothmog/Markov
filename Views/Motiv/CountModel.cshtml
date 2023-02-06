@@ -1,0 +1,45 @@
+﻿@using Markov.Classes.HMModel
+@model HMModel
+<style>
+    table, th, td {
+        border: 1px solid black;
+    }
+</style>
+<script type="text/javascript">
+    function countModel(){
+        debugger;
+        var sekv = $("#seqv").val();
+        var modelId = $("#modelId").val();
+        $.ajax({
+            type: "POST",
+            url: "/Motiv/Count",
+            data: { sequention: sekv, modelId: modelId },
+            success: function (result) {
+                $(result).each(function(elem){
+                    debugger;
+                });
+            }
+        });
+    }    
+</script>
+
+<div class="row">
+    <h1>Spočítání modelu:</h1>
+    <br />
+    <input id="modelId" type="hidden" style="width:600px" value="@Model._id" />
+    <table>
+            <tr><td style="width:250px">@Model.Name</td><td style="width:500px">@Model.Description</td></tr>
+    </table>
+    <br/>
+    
+</div>
+<div class="row">
+    <p>
+        Sekvence k prozkoumání: <input id="seqv" style="width:600px" />
+    </p>
+</div>
+<div class="row">
+    <p>
+        <button onclick="countModel()">Vyhodnotit</button>
+    </p>
+</div>

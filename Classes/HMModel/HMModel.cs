@@ -23,7 +23,6 @@ namespace Markov.Classes.HMModel
 			for(int i = 0; i < sequence.Length; i++)
 			{
 				var actualNode = Nodes.Where(x=> !x.IsIteration).ToList()[i];
-				actualNode.SetVals();
 				if(actualNode.Lines.Count == 2)
 				{
 					if (iterationSteps > 0)
@@ -55,7 +54,6 @@ namespace Markov.Classes.HMModel
 			var iterNode = this.Nodes.FirstOrDefault(x => x.IsIteration);
 			if (iterNode != null)
 			{
-				iterNode.SetVals();
 				var iterLine = iterNode.Lines.FirstOrDefault(x => x.IsIteration);
 				for (int i = 0; i < subSequention.Length; i++)
 				{
@@ -84,6 +82,7 @@ namespace Markov.Classes.HMModel
 					Node node = new Node() { IsIteration = true, Values = ParseIterLine(line, ref lineOut, ref iterLine)};
 					node.Lines.Add(new Line() { IsIteration = true, Weight = iterLine });
 					node.Lines.Add(new Line() { IsIteration = false, Weight = lineOut.Value });
+					node.SetMongoVals();
 					this.Nodes.Add(node);
 				}
 				else
