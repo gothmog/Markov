@@ -3,3 +3,75 @@
 *@
 @{
 }
+<script type="text/javascript">
+    function addNode(){
+        var numItems = $('.row').length + 1;
+        $(".model").append($("<div class=\"row\"><div class=\"col-6\"><p>Uzel " + numItems 
+        + "</p><table class=\"node\"><tr><th>A</th><th>C</th><th>G</th><th>T</th></tr><tr><td><input style=\"width: 100px\"/></td><td><input style=\"width: 100px\"/></td><td><input style=\"width: 100px\"/></td><td><input style=\"width: 100px\"/></td></tr><tr><td>Přechod:</td><td><input style=\"width: 100px\"/></td></tr></table>"));
+    }  
+
+    function removeNode(){
+        if ($('.model').children().length > 1){
+            $('.model').children().last().remove();
+        }
+    }
+
+    function sendModel(){
+        var lines = [];
+        var iterline = getIterLine();
+        var nodeFrom = $("#iter-node-id").val();
+        var weightToIter = $("#iter-to").val();
+        $(".node").each(function (index, element) {
+            var t = $(element).find('input');
+            var nodeline = $(t[0]).val() + ";" + $(t[1]).val() + ";" + $(t[2]).val() + ";" + $(t[3]).val() + "/" + $(t[4]).val();
+            if (index + 1 == nodeFrom){
+                nodeline = nodeline + "|" + weightToIter;
+                lines.push(nodeline);
+                lines.push(iterline);
+            }else{
+                lines.push(nodeline);
+            }
+        });
+        debugger;
+
+    }
+
+    function getIterLine(){
+        var line = "|" + $("#iter_A").val() + ";" + $("#iter_C").val() + ";" + $("#iter_G").val() + ";" + $("#iter_T").val();
+        line = line + "/" + $("#iter-weight").val() + "|" + $("#iter-from").val();
+        return line;
+    }
+</script>
+
+<div class="model">
+    <div class="row">
+        <p>Jméno modelu: <input id="model_name" style="width:200px" /></p>
+        <p>Popis modelu: <input id="model_desc" style="width:500px" /></p>
+    </div>
+<div class="row">
+    <div class="col-6">
+            <p>Uzel 1</p>
+            <table class="node">
+                <tr><th>A</th><th>C</th><th>G</th><th>T</th></tr>
+                <tr><td><input style="width:100px" id="nodeA_1" /></td><td><input style="width:100px" id="nodeC_1" /></td><td><input style="width:100px" id="nodeG_1" /></td><td><input style="width:100px" id="nodeT_1" /></td></tr>
+                <tr><td>Přechod:</td><td><input style="width: 100px" /></td></tr>
+            </table>
+        <br />
+            <p><button onclick="addNode()">Přidej uzel</button><button onclick="removeNode()" style="width:100px">Smaž uzel</button></p>
+        <br />
+            
+    </div>
+    <div class="col-6">
+        <p>Iterace</p>
+            <table>
+                <tr><th>A</th><th>C</th><th>G</th><th>T</th></tr>
+                <tr class="iter"><td><input style="width:100px" id="iter_A" /></td><td><input style="width:100px" id="iter_C" /></td><td><input style="width:100px" id="iter_G" /></td><td><input style="width:100px" id="iter_T" /></td></tr>
+                <tr><td>Přechod do:</td><td><input id="iter-to" style="width: 100px" /></td><td>Přechod z:</td><td><input id="iter-from" style="width: 100px" /></td></tr>
+                <tr><td>Iterace:</td><td><input id="iter-weight" style="width: 100px" /></td><td>Po uzlu č.:</td><td><input id="iter-node-id" style="width: 100px" /></td></tr>
+            </table>
+            <br />
+    </div>
+</div>
+</div>
+<br/>
+<button onclick="sendModel()">Ulož model</button>

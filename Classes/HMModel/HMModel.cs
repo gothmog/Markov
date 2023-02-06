@@ -1,6 +1,7 @@
 ﻿using Accord.Collections;
 using MongoDB.Bson;
 using MonGothRepository;
+using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -21,7 +22,8 @@ namespace Markov.Classes.HMModel
 			double result = 1;
 			for(int i = 0; i < sequence.Length; i++)
 			{
-				var actualNode = Nodes.Where(x=> !(x is IterationNode)).ToList()[i];
+				var actualNode = Nodes.Where(x=> !x.IsIteration).ToList()[i];
+				actualNode.SetVals();
 				if(actualNode.Lines.Count == 2)
 				{
 					if (iterationSteps > 0)
@@ -50,31 +52,36 @@ namespace Markov.Classes.HMModel
 		public double CountIteration(string subSequention, bool isBackGround, double defaultBackgroud = 0.25)
 		{
 			double result = 1;
-			var iterNode = this.Nodes.FirstOrDefault(x => x is IterationNode);
-			var iterLine = iterNode.Lines.FirstOrDefault(x => x.IsIteration);
-			for (int i = 0; i < subSequention.Length; i++)
+			var iterNode = this.Nodes.FirstOrDefault(x => x.IsIteration);
+			if (iterNode != null)
 			{
-				result = result * (isBackGround ? defaultBackgroud : iterNode.Values[subSequention[i]]);
-				if (subSequention.Length > 1 && i < subSequention.Length - 1)
+				iterNode.SetVals();
+				var iterLine = iterNode.Lines.FirstOrDefault(x => x.IsIteration);
+				for (int i = 0; i < subSequention.Length; i++)
 				{
-					result = result * iterLine.Weight;
+					result = result * (isBackGround ? defaultBackgroud : iterNode.Values[subSequention[i]]);
+					if (subSequention.Length > 1 && i < subSequention.Length - 1)
+					{
+						result = result * iterLine.Weight;
+					}
 				}
+				return result * iterNode.Lines.FirstOrDefault(x => !x.IsIteration).Weight;
 			}
-			return result * iterNode.Lines.FirstOrDefault(x => !x.IsIteration).Weight;
+			else return 1;
 		}
 
-		public void GenerateModel()
+		public void GenerateModel(IList<string> _lines = null)
 		{
 			this.Nodes = new List<Node>();
 			string path = Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Data", "Model.txt");
-			IList<string> lines = File.ReadAllLines(path).ToList();
+			IList<string> lines = _lines == null ? File.ReadAllLines(path).ToList() : _lines;
 			foreach (string line in lines)
 			{
 				double? lineOut = null;
 				if (line.StartsWith('|'))
 				{
 					double iterLine = 1;
-					IterationNode node = new IterationNode() { Values = ParseIterLine(line, ref lineOut, ref iterLine)};
+					Node node = new Node() { IsIteration = true, Values = ParseIterLine(line, ref lineOut, ref iterLine)};
 					node.Lines.Add(new Line() { IsIteration = true, Weight = iterLine });
 					node.Lines.Add(new Line() { IsIteration = false, Weight = lineOut.Value });
 					this.Nodes.Add(node);
@@ -92,6 +99,7 @@ namespace Markov.Classes.HMModel
 					{
 						node.Lines.Add(new Line() { IsIteration = false, ToIteration = true, Weight = iterLine.Value }) ;
 					}
+					node.SetMongoVals();
 					this.Nodes.Add(node);
 				}
 			}
@@ -106,8 +114,8 @@ namespace Markov.Classes.HMModel
 				if (splited[1].Contains('|'))
 				{
 					string[] lineSplited = splited[1].Split('|');
-					lineOut = Double.Parse(lineSplited[1]);
-					iterLine = Double.Parse(lineSplited[0]);
+					lineOut = Double.Parse(lineSplited[1], CultureInfo.InvariantCulture);
+					iterLine = Double.Parse(lineSplited[0], CultureInfo.InvariantCulture);
 				}
 				else lineOut = Double.Parse(splited[1]);
 			}
@@ -120,8 +128,8 @@ namespace Markov.Classes.HMModel
 			string[] splited = line.Split('/');
 			var dict = ParseValues(splited[0]);
 			string[] lineSplited = splited[1].Split('|');
-			lineOut = Double.Parse(lineSplited[1]);
-			iterLine = Double.Parse(lineSplited[0]);
+			lineOut = Double.Parse(lineSplited[1], CultureInfo.InvariantCulture);
+			iterLine = Double.Parse(lineSplited[0], CultureInfo.InvariantCulture);
 			return dict;
 		}
 
@@ -129,10 +137,10 @@ namespace Markov.Classes.HMModel
 		{
 			var dict = new Dictionary<char, double>();
 			string[] vals = valStr.Split(';');
-			dict.Add('A', Double.Parse(vals[0]));
-			dict.Add('C', Double.Parse(vals[1]));
-			dict.Add('G', Double.Parse(vals[2]));
-			dict.Add('T', Double.Parse(vals[3]));
+			dict.Add('A', Double.Parse(vals[0], CultureInfo.InvariantCulture));
+			dict.Add('C', Double.Parse(vals[1], CultureInfo.InvariantCulture));
+			dict.Add('G', Double.Parse(vals[2], CultureInfo.InvariantCulture));
+			dict.Add('T', Double.Parse(vals[3], CultureInfo.InvariantCulture));
 			return dict;
 		}
 	}

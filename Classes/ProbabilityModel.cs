@@ -14,7 +14,7 @@ namespace Markov.Classes
 			
 			for(int i = 0; i < HMModel.MaxIterations; i++)
 			{
-				int seqLenght = HMModel.Nodes.Where(x => !(x is IterationNode)).Count() + i;
+				int seqLenght = HMModel.Nodes.Where(x => !x.IsIteration).Count() + i;
 				int index = 0;
 				while (index + seqLenght < Sequence.Length)
 				{
