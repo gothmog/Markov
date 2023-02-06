@@ -3,3 +3,8 @@
 ################################################################################
 
 /bin/Debug/net6.0
+/obj/Debug/net6.0
+/obj
+/.vs/Markov/FileContentIndex/write.lock
+/.vs/Markov/FileContentIndex/96738ee2-e617-4c94-bb29-2db9e5662d3e.vsidx
+/.vs/Markov/FileContentIndex/5f398120-057e-4c0d-b43e-716f91e07de4.vsidx
