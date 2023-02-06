@@ -1,7 +1,11 @@
+using Markov.Classes.HMModel;
+using MonGothRepository;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IMongoRepositoryProvider<HMModel>>(x => new MongoRepositoryProvider<HMModel>("HMModel", "mongodb://localhost:27017/"));
 
 var app = builder.Build();
 
