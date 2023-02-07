@@ -28,3 +28,13 @@ bin/Debug/net6.0/Markov.dll
 .vs/ProjectEvaluation/markov.projects.v5.1
 .vs/Markov/DesignTimeBuild/.dtbcache.v2
 .vs/Markov/v17/.futdcache.v2
+*.dll
+*.v2
+*.json
+*.exe
+*.pdb
+*.dll
+*.so
+*.dylib
+*.config
+*.v2

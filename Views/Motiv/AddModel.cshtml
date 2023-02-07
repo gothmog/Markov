@@ -22,6 +22,7 @@
         var nodeFrom = $("#iter-node-id").val();
         var modelName = $("#model_name").val();
         var modelDesc = $("#model_desc").val();
+        var maxIter = $("#rangeInput").val();
         var weightToIter = $("#iter-to").val();
         $(".node").each(function (index, element) {
             var t = $(element).find('input');
@@ -37,7 +38,7 @@
         $.ajax({
             type: "POST",
             url: "/Motiv/SaveModel",
-            data: { modelName: modelName, modelDesc: modelDesc, lines: lines },
+            data: { modelName: modelName, modelDesc: modelDesc, maxIteration: maxIter, lines: lines },
             success: function (result) {
                 window.location = "/Motiv/Index";
             }
@@ -57,6 +58,12 @@
     <div class="row">
         <p>Jméno modelu: <input id="model_name" style="width:200px" /></p>
         <p>Popis modelu: <input id="model_desc" style="width:500px" /></p>
+        <p>
+            Max počet iterací: <input type="range" id="rangeInput" name="rangeInput" min="0" max="20" value="0"
+                                      oninput="amount.value=rangeInput.value">
+
+            <output id="amount" name="amount" for="rangeInput">0</output>
+        </p>
     </div>
     <div class="row">
         <div class="col-6">

@@ -7,7 +7,6 @@
 </style>
 <script type="text/javascript">
     function countModel(){
-        debugger;
         var sekv = $("#seqv").val();
         var modelId = $("#modelId").val();
         $.ajax({
@@ -15,14 +14,16 @@
             url: "/Motiv/Count",
             data: { sequention: sekv, modelId: modelId },
             success: function (result) {
-                $(result).each(function(elem){
-                    debugger;
-                });
+                var elem = $("#res");
+                $(elem).empty();
+                for(i=0; i<result.length;i++){
+                    $(elem).append("<p>Výsledek " + (i + 1) + ": " + result[i] + "</p>");
+                }
             }
         });
     }    
 </script>
-
+@if(Model != null){
 <div class="row">
     <h1>Spočítání modelu:</h1>
     <br />
@@ -38,8 +39,18 @@
         Sekvence k prozkoumání: <input id="seqv" style="width:600px" />
     </p>
 </div>
+<div id="res" class="row">
+    
+</div>
 <div class="row">
     <p>
         <button onclick="countModel()">Vyhodnotit</button>
     </p>
 </div>
+}else {
+    <div class="row">
+        <p>
+            Není vybrán model!
+        </p>
+    </div>
+}

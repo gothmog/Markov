@@ -35,23 +35,28 @@ namespace Markov.Controllers
 			return View();
 		}
 
-		public bool SaveModel(string modelName, string modelDesc, string[] lines)
+		public bool SaveModel(string modelName, string modelDesc, int maxIteration, string[] lines)
 		{
 			HMModel model = new HMModel();
 			model.Name = modelName;
 			model.Description = modelDesc;
+			model.MaxIterations = maxIteration;
 			model.GenerateModel(lines.ToList());
-			//_modelService.AddItemAsync(model);
+			_modelService.AddItemAsync(model);
 			return true;
 		}
 
 		public IActionResult CountModel(string id)
 		{
-			var model = _modelService.GetItem(x => x._id == ObjectId.Parse(id));
-			return View(model);
+			if (!String.IsNullOrEmpty(id))
+			{
+				var model = _modelService.GetItem(x => x._id == ObjectId.Parse(id));
+				return View(model);
+			}
+			return View();
 		}
 
-		public IList<string> Count(string sequention, string modelId)
+		public string[] Count(string sequention, string modelId)
 		{
 			var model = _modelService.GetItem(x => x._id == ObjectId.Parse(modelId));
 			foreach(var node in model.Nodes) { node.SetVals(); }
@@ -65,7 +70,7 @@ namespace Markov.Controllers
 			probalityModel.CountProbalities();
 			var res = probalityModel.Probabilities.Where(x => x.Probability > x.BackgroudProbalitiy).ToList();
 			IList<string> strResults = res.Select(x => GenerateResult(x, probalityModel.Sequence.Length)).ToList();
-			return strResults;
+			return strResults.ToArray();
 		}
 
 		private string GenerateResult(ProbabilitySequence seqv, int length)
